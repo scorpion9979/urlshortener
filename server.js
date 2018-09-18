@@ -45,9 +45,30 @@ app.post("/api/shorturl/new", function (req, res) {
   let urlLookup = req.body.url.replace(/^(https?:\/\/)/, "").replace(/\/(\w+\/?)*$/, "");
   dns.lookup(urlLookup, function (err, address, family) {
     if(err) {
-      res.send({"error":"invalid URL"});
+      res.send({error:"invalid URL"});
     } else {
-      res.send({"original_url":req.body.url.replace(/\/$/, ""),"short_url":1});
+      let original_url = req.body.url.replace(/\/$/, "");
+      Model.findOne({original_url: original_url}, function (err, doc) {
+        if(doc == null) {
+          // url doesn't already exist in db => create new entry
+          Model.count({}, function(err, c) {
+            let short_url = c + 1;
+            let doc = {"original_url": original_url,"short_url": short_url}
+            let model = new Model(doc);
+            model.save(function (err, doc) {
+              if(err) {
+                console.log(err);
+              } else {
+                res.send({"original_url": doc.original_url,"short_url": doc.short_url});
+              }
+            });
+          });
+        } else {
+          // url already exists in db => pull it from db
+          res.send({"original_url": doc.original_url,"short_url": doc.short_url});
+        }
+      });
+      
     }
   })
 });
