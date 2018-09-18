@@ -39,11 +39,7 @@ var urlSchema = new Schema({
   original_url: {type: String, required: true},
   short_url: {type: String, required: true}
 });
-var countSchema = new Schema({
-  urlCount: {type: Number, required: true}
-});
 var Model = mongoose.model("Model", urlSchema);
-var Count = mongoose.model("Count", countSchema);
 
 app.post("/api/shorturl/new", function (req, res) {
   let urlLookup = req.body.url.replace(/^(https?:\/\/)/, "").replace(/\/(\w+\/?)*$/, "");
