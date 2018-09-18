@@ -45,10 +45,10 @@ app.post("/api/shorturl/new", function (req, res) {
   let urlLookup = req.body.url.replace(/^(https?:\/\/)/, "").replace(/\/(\w+\/?)*$/, "");
   dns.lookup(urlLookup, function (err, address, family) {
     if(err) {
-      res.send({error:"invalid URL"});
+      res.send({"error": "invalid URL"});
     } else {
       let original_url = req.body.url.replace(/\/$/, "");
-      Model.findOne({original_url: original_url}, function (err, doc) {
+      Model.findOne({"original_url": original_url}, function (err, doc) {
         if(doc == null) {
           // url doesn't already exist in db => create new entry
           Model.count({}, function(err, c) {
