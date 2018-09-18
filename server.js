@@ -4,6 +4,7 @@ var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+const dns = require('dns');
 
 var cors = require('cors');
 
@@ -43,6 +44,16 @@ var countSchema = new Schema({
 });
 var Model = mongoose.model("Model", urlSchema);
 var Count = mongoose.model("Count", countSchema);
+
+app.post("/api/shorturl/new", function (req, res) {
+  dns.lookup(req.body.url, function (err, address, family) {
+    if(err) {
+      res.send({"error":"invalid URL"});
+    } else {
+      res.send({"original_url":req.body.url,"short_url":1});
+    }
+  })
+});
 
 var listener = app.listen(port, function () {
   console.log('Node.js listening on port: ' + listener.address().port);
