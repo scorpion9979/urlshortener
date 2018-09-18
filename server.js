@@ -33,6 +33,16 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+var Schema = mongoose.Schema;
+var urlSchema = new Schema({
+  original_url: {type: String, required: true},
+  short_url: {type: String, required: true}
+});
+var countSchema = new Schema({
+  urlCount: {type: Number, required: true}
+});
+var Model = mongoose.model("Model", urlSchema);
+var Count = mongoose.model("Count", countSchema);
 
 var listener = app.listen(port, function () {
   console.log('Node.js listening on port: ' + listener.address().port);
