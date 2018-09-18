@@ -73,6 +73,17 @@ app.post("/api/shorturl/new", function (req, res) {
   })
 });
 
+app.get("/api/shorturl/:short_url", function (req, res) {
+  let short_url = req.params.short_url;
+  Model.findOne({"short_url": short_url}, function (err, doc) {
+    if(doc == null) {
+      res.send({"error":"No short url found for given input"});
+    } else {
+      res.redirect(doc.original_url);
+    }
+  })
+})
+
 var listener = app.listen(port, function () {
   console.log('Node.js listening on port: ' + listener.address().port);
 });
