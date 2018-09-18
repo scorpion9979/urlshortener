@@ -46,8 +46,8 @@ var Model = mongoose.model("Model", urlSchema);
 var Count = mongoose.model("Count", countSchema);
 
 app.post("/api/shorturl/new", function (req, res) {
-  let url = req.body.url.replace(/^(https?:\/\/)/, "").replace(/\/(\w+\/?)*$/, "");
-  dns.lookup(url, function (err, address, family) {
+  let urlLookup = req.body.url.replace(/^(https?:\/\/)/, "").replace(/\/(\w+\/?)*$/, "");
+  dns.lookup(urlLookup, function (err, address, family) {
     if(err) {
       res.send({"error":"invalid URL"});
     } else {
