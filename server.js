@@ -42,9 +42,11 @@ var urlSchema = new Schema({
 var Model = mongoose.model("Model", urlSchema);
 
 app.post("/api/shorturl/new", function (req, res) {
-  let urlLookup = req.body.url.replace(/^(https?:\/\/)/, "").replace(/\/(\w+\/?)*$/, "");
+  let urlLookup = req.body.url.replace(/^https?:\/\//, "").replace(/(\/\w+)*\/?$/, "");
+  // make sure URL follows format: http(s)://www.example.com(/more/routes)
+  let urlMatched = /^https?:\/\/(\w+\.)+\w+(\/\w+)*\/?$/.test(req.body.url);
   dns.lookup(urlLookup, function (err, address, family) {
-    if(err) {
+    if(err || !urlMatched) {
       res.send({"error": "invalid URL"});
     } else {
       let original_url = req.body.url.replace(/\/$/, "");
