@@ -4,8 +4,10 @@ const apiController = require('../controllers/api.controller');
 
 // Since our router in app.js already points to /api, every call here is /api/hello and so on
 
-app.get('/hello', apiController.greet);
+router.get('/hello', apiController.greet);
 
-app.post('/shorturl/new', apiController.createUrl);
+router.post('/shorturl/new', apiController.createShortUrl);
 
-app.get('/shorturl/:short_url',apiController.shortenUrl);
+router.get('/shorturl/:short_url', apiController.shortUrlDetails);
+
+module.exports = router;

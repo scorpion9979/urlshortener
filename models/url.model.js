@@ -1,14 +1,16 @@
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
 
-var urlSchema = new Schema({
-    original_url: { 
-        type: String, 
+const urlSchema = new mongoose.Schema({
+    original_url: {
+        type: String,
         required: true
     },
-    short_url: { 
-        type: String, 
+    short_url: {
+        type: String,
         required: true
     }
-});
+}, { timestamps: true })
 
-var Url = mongoose.model("Url", urlSchema);
+const Url = mongoose.model('Url', urlSchema);
+
+module.exports = Url;

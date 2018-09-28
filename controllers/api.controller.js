@@ -1,11 +1,12 @@
 const Url = require('../models/url.model');
 const dns = require('dns');
+const mongoose = require('mongoose')
 
 module.exports.greet = (req, res, next) => {
     res.json({ greeting: 'hello API' });
 }
 
-module.exports.createUrl = (req, res, next) => {
+module.exports.createShortUrl = (req, res, next) => {
     let urlLookup = req.body.url.replace(/^https?:\/\//, "").replace(/(\/[^\/\s]+)*\/?$/, "");
     // make sure URL follows format: http(s)://www.example.com(/more/routes)
     let urlMatched = /^https?:\/\/(\w+\.)+\w+(\/[^\/\s]+)*\/?$/.test(req.body.url);
@@ -44,7 +45,7 @@ module.exports.createUrl = (req, res, next) => {
     })
 }
 
-module.exports.shortenUrl = (req, res, next) => {
+module.exports.shortUrlDetails = (req, res, next) => {
     let short_url = req.params.short_url;
     Url.findOne({ "short_url": short_url }, function (err, doc) {
         if (doc === null) {
